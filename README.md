@@ -1,2 +1,2 @@
 # Adote uma Causa
-Plataforma web desenvolvida em django para explorar instituições de caridade usando API GlobalGiving
+Plataforma web desenvolvida em django para pesquisar por instituições de caridade usando a API GlobalGiving.
