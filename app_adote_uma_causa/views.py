@@ -12,3 +12,6 @@ def contact(request):
 
 def about(request):
     return render(request, 'app_adote_uma_causa/about.html')
+
+def base(request):
+    return render(request, 'app_adote_uma_causa/base.html')
