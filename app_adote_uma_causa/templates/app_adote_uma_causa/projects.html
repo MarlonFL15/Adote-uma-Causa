@@ -18,13 +18,16 @@
                 <div class="sidebar-widget">
                     
                     <div class="tag-widget">
-                        <a href="">National</a>
+                        {% for key, value in themes.items %}
+                            <a href="{% url 'projects' %}?theme={{key}}"> {{ value }} </a>
+                        {% endfor %}
+                        <!-- <a href="">National</a>
                         <a href="">International</a>
                         <a href="">Economics</a>
                         <a href="">Politics</a>
                         <a href="">Lifestyle</a>
                         <a href="">Technology</a>
-                        <a href="">Trades</a>
+                        <a href="">Trades</a> -->
                     </div>
                 </div>
             </div>
