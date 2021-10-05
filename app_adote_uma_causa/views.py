@@ -35,8 +35,24 @@ def home(request):
         })
     return render(request, 'app_adote_uma_causa/home.html', {'projects':projects})
 
-def projects(request):
-    return render(request, 'app_adote_uma_causa/projects.html', {'themes': themes})
+def projects(request, theme=None):
+    projects = []
+    theme = request.GET.get('theme','')
+    url = 'https://api.globalgiving.org/api/public/projectservice/themes/' + theme + '/projects'
+    json = make_request(url)
+   
+    for j in json['projects']['project']:
+        projects.append({
+            'title': j['title'],
+            'summary': j['summary'],
+            'funding': j['funding'],
+            'goal': j['goal'],
+            'percent': float(j['funding']) / float(j['goal']) * 100,
+            'image_link': j['image']['imagelink'][5]['url']
+        })
+
+    return render(request, 'app_adote_uma_causa/projects.html', {'themes': themes, 
+                                                                 'projects':projects})
 
 def contact(request):
     return render(request, 'app_adote_uma_causa/contact.html')

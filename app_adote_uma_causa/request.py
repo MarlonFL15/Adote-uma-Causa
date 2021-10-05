@@ -10,5 +10,6 @@ headers = {
 
 def make_request(url):
     response = requests.get(url+'?api_key='+API_KEY, headers=headers)
+    print(url+'?api_key='+API_KEY)
     return response.json()
 
