@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render
 
 from django.http import JsonResponse
@@ -27,6 +28,7 @@ def home(request):
     for j in json['projects']['project']:
         projects.append({
             'title': j['title'],
+            'id': j['id'],
             'summary': j['summary'],
             'funding': j['funding'],
             'goal': j['goal'],
@@ -38,12 +40,13 @@ def home(request):
 def projects(request, theme=None):
     projects = []
     theme = request.GET.get('theme','')
-    url = 'https://api.globalgiving.org/api/public/projectservice/themes/' + theme + '/projects'
+    url = 'https://api.globalgiving.org/api/public/projectservice/themes/' + theme + '/projects/active'
     json = make_request(url)
    
     for j in json['projects']['project']:
         projects.append({
             'title': j['title'],
+            'id': j['id'],
             'summary': j['summary'],
             'funding': j['funding'],
             'goal': j['goal'],
@@ -60,8 +63,20 @@ def contact(request):
 def about(request):
     return render(request, 'app_adote_uma_causa/about.html')
 
-def base(request):
-    return render(request, 'app_adote_uma_causa/base.html')
+def details(request, id):
+    url = 'https://api.globalgiving.org/api/public/projectservice/projects/'+id
+    json = make_request(url)['project']
+    project = {
+        'title': json['title'],
+        'summary': json['summary'],
+        'activities': json['activities'],
+        'need': json['need'],
+        'image': json['image']['imagelink'][5]['url'],
+        'funding': json['funding'],
+        'goal': json['goal'],
+        'percent': float(json['funding']) / float(json['goal']) * 100,
+    }
+    return render(request, 'app_adote_uma_causa/single.html', {'project': project})
 
 def teste(request):
     url = 'https://api.globalgiving.org/api/public/projectservice/featured/projects'
