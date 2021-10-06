@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_adote_uma_causa'
+    'app_adote_uma_causa',
+
 ]
 
 MIDDLEWARE = [

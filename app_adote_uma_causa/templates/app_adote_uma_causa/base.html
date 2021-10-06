@@ -66,9 +66,8 @@
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav ml-auto">
                         <a href="{% url 'home' %}"  class="nav-item nav-link {% if request.path == '/home' %} active {% endif%}">Home </a>
-                        <a href="{% url 'projects' %}"  class="nav-item nav-link {% if request.path == '/projects' %} active {% endif%}">Projetos</a>
+                        <a href="{% url 'projects'%}?theme=null"  class="nav-item nav-link {% if '/projects' in request.path  %} active {% endif%}">Projetos</a>
                         <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about' %} active {% endif%}">Sobre</a>
-                        <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact' %} active {% endif%}">Contato</a>
                     </div>
                 </div>
             </div>
@@ -102,7 +101,6 @@
         
         <!-- Contact Javascript File -->
         <script src="{% static 'app_adote_uma_causa/mail/jqBootstrapValidation.min.js' %}"></script>
-        <script src="{% static 'app_adote_uma_causa/mail/contact.js' %}"></script>
 
         <!-- Template Javascript -->
         <script src="{% static 'app_adote_uma_causa/js/main.js' %}"></script>

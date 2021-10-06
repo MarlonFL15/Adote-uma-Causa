@@ -1,8 +1,10 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
-
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from .request import make_request
+from googletrans import Translator
+
 
 themes = {
     'hunger':'Comida saudável',
@@ -15,8 +17,8 @@ themes = {
     'climate': 'Ações climáticas',
     'gender': 'Igualdade de gênero',
     'rights': 'Justiça e direitos humanos',
-    'Direitos LGBTQIA+': 'lgbt',
-    'Igualdade Racial': 'justice'
+    'lgbt': 'Direitos LGBTQIA+',
+    'justice': 'Igualdade Racial'
 }
 
 # Create your views here.
@@ -24,10 +26,10 @@ def home(request):
     url = 'https://api.globalgiving.org/api/public/projectservice/featured/projects'
     json = make_request(url)
     projects = []
-
+    translator = Translator()
     for j in json['projects']['project']:
         projects.append({
-            'title': j['title'],
+            'title': translator.translate(j['title'], dest='pt').text,
             'id': j['id'],
             'summary': j['summary'],
             'funding': j['funding'],
@@ -40,48 +42,43 @@ def home(request):
 def projects(request, theme=None):
     projects = []
     theme = request.GET.get('theme','')
-    url = 'https://api.globalgiving.org/api/public/projectservice/themes/' + theme + '/projects/active'
-    json = make_request(url)
-   
-    for j in json['projects']['project']:
-        projects.append({
-            'title': j['title'],
-            'id': j['id'],
-            'summary': j['summary'],
-            'funding': j['funding'],
-            'goal': j['goal'],
-            'percent': float(j['funding']) / float(j['goal']) * 100,
-            'image_link': j['image']['imagelink'][5]['url']
-        })
+    translator = Translator()
+    if theme != 'null':
+        url = 'https://api.globalgiving.org/api/public/projectservice/themes/' + theme + '/projects/active'
+        json = make_request(url)
+    
+        for j in json['projects']['project']:
+            projects.append({
+                'title': translator.translate(j['title'], dest='pt').text,
+                'id': j['id'],
+                'summary': j['summary'],
+                'funding': j['funding'],
+                'goal': j['goal'],
+                'percent': float(j['funding']) / float(j['goal']) * 100,
+                'image_link': j['image']['imagelink'][5]['url']
+            })
 
-    return render(request, 'app_adote_uma_causa/projects.html', {'themes': themes, 
-                                                                 'projects':projects})
-
-def contact(request):
-    return render(request, 'app_adote_uma_causa/contact.html')
+        return render(request, 'app_adote_uma_causa/projects.html', {'themes': themes, 'current_theme':theme,
+                                                                    'projects':projects})
+    else:
+        return render(request, 'app_adote_uma_causa/projects.html', {'themes': themes})
 
 def about(request):
     return render(request, 'app_adote_uma_causa/about.html')
 
-def details(request, id):
+async def details(request, id):
     url = 'https://api.globalgiving.org/api/public/projectservice/projects/'+id
     json = make_request(url)['project']
+    translator = Translator()
     project = {
-        'title': json['title'],
-        'summary': json['summary'],
-        'activities': json['activities'],
-        'need': json['need'],
+        'title': translator.translate(json['title'], dest='pt').text,
+        'summary': translator.translate(json['summary'], dest='pt').text,
+        'activities': translator.translate(json['activities'], dest='pt').text,
+        'need': translator.translate(json['need'], dest='pt').text,
         'image': json['image']['imagelink'][5]['url'],
         'funding': json['funding'],
         'goal': json['goal'],
         'percent': float(json['funding']) / float(json['goal']) * 100,
     }
+    print(project['title'])
     return render(request, 'app_adote_uma_causa/single.html', {'project': project})
-
-def teste(request):
-    url = 'https://api.globalgiving.org/api/public/projectservice/featured/projects'
-    json = make_request(url)
-    projects = []
-
-
-    return JsonResponse(json, safe=False)

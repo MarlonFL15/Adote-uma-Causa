@@ -7,7 +7,7 @@ import django_adminlte
 urlpatterns = [
     url('home', home, name='home'),
     url('about', about, name='about'),
-    url('contact', contact, name='contact'),
     url(r'^projects/$', projects, name='projects'),
-    url(r'^details/(?P<id>\d+)/$', details, name='details')
+    url(r'^details/(?P<id>\d+)/$', details, name='details'),
+
 ]

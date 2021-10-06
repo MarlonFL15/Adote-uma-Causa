@@ -7,7 +7,7 @@
     {% include 'includes/header_2.html' with current_page='Projetos' current_link='projects' title='Encontre Projetos'%}
 {% endblock header %}        
         
-        
+
 {% block conteudo %}
     <!-- Causes Start -->
     <div class="causes">
@@ -19,7 +19,7 @@
                     
                     <div class="tag-widget">
                         {% for key, value in themes.items %}
-                            <a href="{% url 'projects' %}?theme={{key}}"> {{ value }} </a>
+                            <a class="{% if key == current_theme %} active {% endif %}" href="{% url 'projects' %}?theme={{key}}"> {{ value }}</a>
                         {% endfor %}
                         <!-- <a href="">National</a>
                         <a href="">International</a>

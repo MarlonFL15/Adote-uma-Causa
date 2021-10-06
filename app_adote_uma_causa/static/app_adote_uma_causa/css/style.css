@@ -2007,6 +2007,12 @@ a:focus {
     border-radius: 0;
 }
 
+.tag-widget .active {
+    color: #ffffff;
+    background: #FDBE33;
+    border-color: #FDBE33;
+}
+
 .tag-widget a:hover {
     color: #ffffff;
     background: #FDBE33;

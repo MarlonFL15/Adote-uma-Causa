@@ -15,7 +15,7 @@ $(function () {
             $this.prop("disabled", true);
 
             $.ajax({
-                url: "contact.php",
+                url: "{% url 'send_email' %}",
                 type: "POST",
                 data: {
                     name: name,
@@ -34,7 +34,8 @@ $(function () {
                             .append('</div>');
                     $('#contactForm').trigger("reset");
                 },
-                error: function () {
+                error: function (e) {
+
                     $('#success').html("<div class='alert alert-danger'>");
                     $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
                             .append("</button>");
