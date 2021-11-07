@@ -1,8 +1,10 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
+
 from .views import *
-import django_adminlte
+
 
 urlpatterns = [
     url('home', home, name='home'),

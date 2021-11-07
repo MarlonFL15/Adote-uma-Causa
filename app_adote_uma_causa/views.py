@@ -1,5 +1,5 @@
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from .request import make_request
@@ -22,6 +22,7 @@ themes = {
 }
 
 # Create your views here.
+
 def home(request):
     url = 'https://api.globalgiving.org/api/public/projectservice/featured/projects'
     json = make_request(url)
@@ -29,7 +30,7 @@ def home(request):
     translator = Translator()
     for j in json['projects']['project']:
         projects.append({
-            'title': translator.translate(j['title'], dest='pt').text,
+            'title': j['title'],
             'id': j['id'],
             'summary': j['summary'],
             'funding': j['funding'],
@@ -43,13 +44,12 @@ def projects(request, theme=None):
     projects = []
     theme = request.GET.get('theme','')
     translator = Translator()
-    if theme != 'null':
+    if theme != 'null' and theme:
         url = 'https://api.globalgiving.org/api/public/projectservice/themes/' + theme + '/projects/active'
         json = make_request(url)
-    
         for j in json['projects']['project']:
             projects.append({
-                'title': translator.translate(j['title'], dest='pt').text,
+                'title': j['title'],
                 'id': j['id'],
                 'summary': j['summary'],
                 'funding': j['funding'],
@@ -71,14 +71,14 @@ async def details(request, id):
     json = make_request(url)['project']
     translator = Translator()
     project = {
-        'title': translator.translate(json['title'], dest='pt').text,
-        'summary': translator.translate(json['summary'], dest='pt').text,
-        'activities': translator.translate(json['activities'], dest='pt').text,
-        'need': translator.translate(json['need'], dest='pt').text,
+        'title': json['title'],
+        'summary': json['summary'],
+        'activities': json['activities'],
+        'need': json['need'],
         'image': json['image']['imagelink'][5]['url'],
         'funding': json['funding'],
         'goal': json['goal'],
         'percent': float(json['funding']) / float(json['goal']) * 100,
     }
-    print(project['title'])
+
     return render(request, 'app_adote_uma_causa/single.html', {'project': project})
