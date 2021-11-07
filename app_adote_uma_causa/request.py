@@ -1,7 +1,7 @@
 #Caso queira baixar e utilizar o projeto, acesse o site da globalgiving API e insira sua chave privada nessa variável
 import requests
 
-API_KEY = 'you_key'
+API_KEY = 'your_key'
 
 headers = {
     'accept': 'application/json',
